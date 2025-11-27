@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>spring-boot-flowed-routing-starter</artifactId>
+	<url>https://github.com/danipenaperez/spring-boot-flowed-routing-starter</url>
+	<description>Utilities to transform and manage JSON Objects</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>21</maven.compiler.release>
+	</properties>
+  <parent>
+    <groupId>io.github.danipenaperez</groupId>
+    <artifactId>spring-boot-flowed-routing-starter-parent</artifactId>
+    <version>0.1.0</version>
+    <!-- <relativePath>../</relativePath> -->
+  </parent>
+	<scm>
+		<connection>scm:git:git://github.com/danipenaperez/spring-boot-flowed-routing-starter.git</connection>
+		<developerConnection>
+			scm:git:ssh://github.com:danipenaperez/spring-boot-flowed-routing-starter.git</developerConnection>
+		<url>http://github.com/danipenaperez/spring-boot-flowed-routing-starter/tree/master</url>
+	</scm>
+
+
+	
+	<dependencies>
+		<dependency>
+            <groupId>io.github.danipenaperez</groupId>
+            <artifactId>spring-boot-flowed-routing-starter-autoconfigure</artifactId>
+        </dependency>
+	</dependencies>
+</project>

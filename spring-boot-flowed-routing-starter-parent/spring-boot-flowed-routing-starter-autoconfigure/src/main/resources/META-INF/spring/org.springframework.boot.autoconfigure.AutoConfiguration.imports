@@ -1,0 +1,3 @@
+io.github.danipenaperez.starter.flowedrouting.context.FlowedRoutingComponentProxyFactory
+io.github.danipenaperez.starter.flowedrouting.context.FlowedRoutingEvaluatorRegister
+io.github.danipenaperez.starter.flowedrouting.context.FlowedRoutingBeanRegistrar

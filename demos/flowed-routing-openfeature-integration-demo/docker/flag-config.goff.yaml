@@ -1,0 +1,10 @@
+new-greeting-flag:
+  variations:
+    available-new-greeting-feature: true
+    not-available-new-greeting-feature: false
+  targeting:
+    - name: Enabled Tenants Evaluation Rule
+      query: tenantId eq "tenant_1"
+      variation: available-new-greeting-feature
+  defaultRule:
+    variation: not-available-new-greeting-feature

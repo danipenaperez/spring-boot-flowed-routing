@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>spring-boot-flowed-routing-starter-parent</artifactId>
+	<version>0.1.0</version>
+  <packaging>pom</packaging>
+  <parent>
+    <groupId>io.github.danipenaperez</groupId>
+    <artifactId>spring-boot-flowed-routing</artifactId>
+    <version>0.1.0</version>
+    <!-- <relativePath>../</relativePath> -->
+  </parent>
+
+  <modules>
+    <module>spring-boot-flowed-routing-starter</module>
+    <module>spring-boot-flowed-routing-starter-autoconfigure</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.github.danipenaperez</groupId>
+        <artifactId>spring-boot-flowed-routing-starter-autoconfigure</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.danipenaperez</groupId>
+        <artifactId>spring-boot-flowed-routing-starter</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>

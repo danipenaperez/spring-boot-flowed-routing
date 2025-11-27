@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: flowed-routing-simple-tenant-demo
+  gofeatureflags:
+    host: http://localhost:1031
+    clientId: flowed-routing-gofeatureflags-demo 
