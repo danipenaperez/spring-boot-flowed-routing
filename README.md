@@ -38,9 +38,9 @@ Using the controller:
 
 ```java
 	 
-	 GreetingService greetingService;
-	 
-	 @GetMapping("/greeting")
+	GreetingService greetingService;
+	
+	@GetMapping("/greeting")
     public String serviceA(@RequestParam("userName") String userName) {
         return greetingService.greeting(userName);
     }
@@ -51,14 +51,14 @@ Lets create the GreetingService interface and mark as **@RoutedInterface**.
 **@RoutedInterface** this interface will be proxied to evaluate which implementations will delegate the execution.
 
 ```java
-	@RoutedInterface
-  public interface GreetingService {
+  	@RoutedInterface
+  	public interface GreetingService {
 
-    public String greeting(String userName);
-  }
+    	public String greeting(String userName);
+  	}
 ```
 
-For now you application has the default Greeting service created:
+Lets create a Default interface implementation bean.
 
 **@RoutedComponent** extends @Component and will be registered as bean at context.
 **isDefaultRouting=true** Indicate that is the default flow execution.
@@ -77,6 +77,10 @@ public class DefaultGreetingService  implements GreetingService{
 
 ```
 
+For now you application has the default Greeting service created, all request through inteface will be managed by DefaultGreetingService
+
+
+
 **After few days Product Owner wants** that Greeting message for users that first username letter is "A" will receive a "you are amazing {username}" message. 
 
 It is easy, simple create new GreetingService implementation with **@RoutedComponent** and write a SpelCondition that checks for userName first letter matchs with "A".
@@ -94,9 +98,11 @@ public class AUsersGreetingService  implements GreetingService{
 }
 ```
 
-At this point, when GreetingService.greeting() method is invoked, will be intercepted and evaluate the implementations **@FlowSpelCondition** if one match will be delegated the execution, if any implementation match, the @RoutedComponent(isDefaultRouting = true) will be delegated.
+At this point, when GreetingService.greeting() method is invoked, will be intercepted and evaluate the implementations **@FlowSpelCondition**.
 
-You can add all custom implementations for GreetingService at any time without touch the initial Default implementation. And you can remove it in the same way.
+If one match will be delegated the execution, if any implementation match, the @RoutedComponent(isDefaultRouting = true) will be delegated.
+
+You can add all custom implementations for GreetingService at any time without touch the initial Default implementation, and you can remove it in the same way.
 
 You can execute this code running the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-simple-demo)
 
@@ -133,13 +139,17 @@ The finally code likes that, and this execution will be only executed for users 
 public class AUsersGreetingService  implements GreetingService{
 
 	@FlowConditionType("SpEL") //Indicate use default evaluator provided in starter. Will use SpEL expressions
-	@FlowSpelCondition(evaluationExpression = "#userName.startsWith('A') && @executionContext.getTenantName() == 'tenant_1'") 
+	@FlowSpelCondition(evaluationExpression = "#userName.startsWith('A') 
+												&& @executionContext.getTenantName() == 'tenant_1'") 
 	@Override
 	public String greeting(String userName){
 		return "You are amazing "+userName;
 	}
 }
 ```
+
+See the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-simple-demo)
+
 
 ## Example 2: executions based on database flags
 
