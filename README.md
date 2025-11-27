@@ -184,9 +184,9 @@ public class AUsersGreetingService  implements GreetingService{
 
 If you want to delegate the execution based on flags, you can integrate with third party services.
 
-Example using open source Feature flags provider **https://github.com/flipt-io/flipt**
+Example using open source Feature flags provider [https://gofeatureflag.org/](https://gofeatureflag.org/) 
 
-See flipt demo at demos/flowed-routing-flipt-io-demo
+See the demo at [demos/flowed-routing-openfeature-integration-demo](demos/flowed-routing-openfeature-integration-demo)
 
 
 # CUSTOM EVALUATORS
@@ -231,7 +231,7 @@ public class klingonEvaluator implements Evaluator{
     //Get annotation to evaluate
     KlingonCondition KlingonCondition = routedMethodDefinition.getMethod().getDeclaredAnnotation(KlingonCondition.class);
 		
-    if("Qapchu' functionality".equals(KlingonCondition.wheaterCklingonExpressionondition())){
+    if("Qapchu' functionality".equals(KlingonCondition.klingonExpression())){
 			return true;
 		}else {
 			return false;
@@ -256,7 +256,7 @@ public class AUsersGreetingService  implements GreetingService{
 }
 ```
 
-
+See the demo at [demos/flowed-routing-custom-evaluator-demo](demos/flowed-routing-custom-evaluator-demo)
 
 # Best practices
 
@@ -264,30 +264,10 @@ If you are using modular application builder, such as maven or gradle it is a go
 
 If the product Owner wants to delete or add features simply use maven profile to include the jar that contains the feature implementation. 
 
-See /demos/flowed-routing-building-demo project.
-
-
-
 
 ## Emailware
 
 Spring Boot Flowed Routing is Free to extend and usage. I'd like you send me an email at <danipenaperez@gmail.com> about anything you'd want to say about this software. I'd really appreciate it!
-
-## Credits
-
-This software uses the following open source packages:
-
-- [Electron](http://electron.atom.io/)
-- [Node.js](https://nodejs.org/)
-- [Marked - a markdown parser](https://github.com/chjj/marked)
-- [showdown](http://showdownjs.github.io/showdown/)
-- [CodeMirror](http://codemirror.net/)
-- Emojis are taken from [here](https://github.com/arvida/emoji-cheat-sheet.com)
-- [highlight.js](https://highlightjs.org/)
-
-## Related
-
-[Try Web version of Markdownify](https://notepad.js.org/markdown-editor/)
 
 ## Support
 
@@ -298,11 +278,4 @@ If you like this project and think it has helped in any way, consider buying me 
 
 ## License
 
-MIT
-
----
-
-> [amitmerchant.com](https://www.amitmerchant.com) &nbsp;&middot;&nbsp;
-> GitHub [@amitmerchant1990](https://github.com/amitmerchant1990) &nbsp;&middot;&nbsp;
-> Twitter [@amit_merchant](https://twitter.com/amit_merchant)
-
+Apache License 2.0
