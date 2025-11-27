@@ -1,4 +1,4 @@
-![screenshot](https://raw.githubusercontent.com/danipenaperez/electron-markdownify/master/app/img/markdownify.gif)
+![screenshot](https://raw.githubusercontent.com/danipenaperez/spring-boot-flowed-routing/refs/heads/main/docs/floweRoutingLogo.png)
 
 # spring-boot-flowed-routing
 Easy Routing bean implementations based on local rules or extenal integrations
