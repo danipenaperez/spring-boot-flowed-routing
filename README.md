@@ -6,11 +6,10 @@ Easy Routing bean implementations based on local rules or extenal integrations
 ## Key Features
 
 * Easy Flow code management execution 
-  - Instantly see what your Markdown documents look like in HTML as you create them.
-* Easy integration
+* Easy installation
   - Integrate as Spring Boot starter in your project.
-* Easy use
-  - Use simple annotations to indicate a Flowed execution selection.
+* Easy to use
+  - Use simple annotations to indicate a Flowed Bean execution selection.
 * Easy extendible 
   - Use default routing evaluators (Based on SpEL, with Spring context evaluations).
   - Or write your own evaluator engine simply extending the Evaluator interface.
@@ -30,14 +29,13 @@ Simply add this dependency at your Spring Boot project:
 ```
 No further configuration needed.
 
-## Usage example
+## Usage example (Simple Use case)
 
 Imagine a very simple application that greeting a user. 
 
-Using the controller:
+As usual create the controller:
 
 ```java
-	 
 	GreetingService greetingService;
 	
 	@GetMapping("/greeting")
@@ -46,9 +44,11 @@ Using the controller:
     }
 ```
 
-Lets create the GreetingService interface and mark as **@RoutedInterface**.
+### Lets create the main GreetingService interface 
 
-**@RoutedInterface** this interface will be proxied to evaluate which implementations will delegate the execution.
+Mark the GreetingService interface using **@RoutedInterface**.
+
+Now GreetingService interface is managed as proxied invocation. The invocation will be evaluated and delegated the execution to the target delegate bean implementations.
 
 ```java
   	@RoutedInterface
@@ -58,10 +58,13 @@ Lets create the GreetingService interface and mark as **@RoutedInterface**.
   	}
 ```
 
-Lets create a Default interface implementation bean.
+### Lets create a Default interface implementation bean.
 
-**@RoutedComponent** extends @Component and will be registered as bean at context.
-**isDefaultRouting=true** Indicate that is the default flow execution.
+We need the default GreetingService implementation. This default implementation is the fallback so is needed to write any evaluation configuration.
+
+Simply mark as **@RoutedComponent**.  This annotation extends @Component and the class will be recognized as Spring Bean.
+
+To indicate that is a Default implemnentation add **isDefaultRouting=true**.
 
 ```java
 
@@ -77,13 +80,48 @@ public class DefaultGreetingService  implements GreetingService{
 
 ```
 
-For now you application has the default Greeting service created, all request through inteface will be managed by DefaultGreetingService
+For now you application has the default Greeting service created, all request through inteface will be managed by DefaultGreetingService bean.
 
+### Adding different implementation for the same Use Case
 
+**After few days Product Owner wants** that the users wich first username letter is "A" will receive a "you are amazing {username}" message. 
 
-**After few days Product Owner wants** that Greeting message for users that first username letter is "A" will receive a "you are amazing {username}" message. 
+What and horrible tendencies could be here... Maybe a lot of if/else conditions, maybe mixed @autowired elementes in the same bean class.
 
-It is easy, simple create new GreetingService implementation with **@RoutedComponent** and write a SpelCondition that checks for userName first letter matchs with "A".
+Maybe worth like this:
+
+```java
+
+@RoutedComponent(isDefaultRouting = true) 
+public class DefaultGreetingService  implements GreetingService{
+
+	GrettingMessageProvider defaultGreetingProvider;
+	AfisrtLetterGreetingProvider AfisrtLetterGreetingProvider;
+
+	@Override
+	public String greeting(String userName){
+		String message;
+		if(userName.startsWith("A")){
+			message = AfisrtLetterGreetingProvider.grettingMessage(userName);
+		}else{
+			message = defaultGreetingProvider.grettingMessage(userName);
+		}
+		return message;
+	}
+
+}
+
+```
+This code is sharing resources, has bad maintainly, no way !!
+
+**The solution**
+
+It is easy, no if/else sentences needed. Not horrible bean implementation with shared autowired dependencies in the same class.
+
+Maintain your code simple and clean.
+
+Simply create new GreetingService implementation and annote with **@RoutedComponent** . Write the SpelCondition that checks for userName first letter matchs with "A".
+
 
 ```java
 @RoutedComponent
@@ -98,23 +136,29 @@ public class AUsersGreetingService  implements GreetingService{
 }
 ```
 
-At this point, when GreetingService.greeting() method is invoked, will be intercepted and evaluate the implementations **@FlowSpelCondition**.
+At this point, when GreetingService.greeting() method is invoked, will be intercepted and evaluated the implementations **@FlowSpelCondition**.
 
-If one match will be delegated the execution, if any implementation match, the @RoutedComponent(isDefaultRouting = true) will be delegated.
+If the AUsersGreetingService.greeting FlowSpelCondition match, this bean will do the job. If any implementation match, the @RoutedComponent(isDefaultRouting = true) will be delegated.
 
-You can add all custom implementations for GreetingService at any time without touch the initial Default implementation, and you can remove it in the same way.
+**Easy extendible and easy maintain**
+- You can add all custom implementations for GreetingService at any time without touch the initial Default implementation, and you can remove it in the same way.
+- Simply remove a feature without touch original implementation.
+- It is easy add new features all in the same code in a clean way, each bean has its owns dependencies.
 
 You can execute this code running the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-simple-demo)
 
-# More complex examples
+# More complex Use Cases
 
-## Example 1 : executions based on Request Context
+## Example 1 : Executions based on Request Context
 
-Imagine that your application is a multitenant application. You can choose a Greeting Service based on multi evaluations:  TenantId  and username first letter.
+Imagine that your application is a multitenant application. 
+
+You can choose a Greeting Service based on a **double factor multi evaluations**:  based on TenantId and username first letter.
  
 TenantId supposed is extracted from a request header.
 
 First create a bean that extract tenant info from Request:
+
 ```java
 @Component
 public class ExecutionContext {
@@ -127,12 +171,14 @@ public class ExecutionContext {
 }
 ```
 
-Now simply change *AUsersGreetingService* to include ExecutionContext.getTenantName at evaluation:
+Now simply change *AUsersGreetingService* to include ExecutionContext.getTenantName at evaluation
+
+The evaluation Expression will look like this:
 ```java
 evaluationExpression = "#username.startsWith('A') && @executionContext.getTenantName() == 'tenant_1'"
 ```
 
-The finally code likes that, and this execution will be only executed for users that first username letter is "A" and owns to tenant_1.  Other invocations will be managed by DefaultGreetingService implementation.
+The finally code likes that, and this execution will be only executed for users that first username letter is "A" and owns to tenant_1.  Other invocations will be managed by DefaultGreetingService implementation (the fallback).
 
 ```java
 @RoutedComponent
@@ -151,14 +197,18 @@ public class AUsersGreetingService  implements GreetingService{
 See the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-simple-demo)
 
 
-## Example 2: executions based on database flags
+## Example 2: Executions based on database flags
 
-Maybe you want to enable and disable execution flows based on dynamic flags. Image the table **flags**
+At this point you will think about dynamic enable or disable bean availability at runtime.
+
+> [!NOTE]
+> Imagine that your app search is slow and wants to use other repository implementation, but without affects the current. You can create your new repository implementation and activate only for your invocations. (Experimental features)
+
+Image the table **flags**
 
 | feature          | enabled |
 |------------------|---------|
-| greeting_tenant1 | false   |
-| greeting_tenant2 | true    |
+| greeting_tenant1 | true    |
 |                  |         |
 
 and the @Repository
@@ -175,6 +225,8 @@ public interface FlagsRepository extends JpaRepository<Flag, Long> {
 
 Now update your evaluation using the FlagsRepository bean available at context, and making a **triple condition based on database value + Request Value + input method value**.
 
+The code will look like this:
+
 ```java
 @RoutedComponent
 public class AUsersGreetingService  implements GreetingService{
@@ -190,13 +242,17 @@ public class AUsersGreetingService  implements GreetingService{
 }
 ```
 
-## Example 2 : executions based on third party services 
+See the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-database-flag-demo)
+
+## Example 3 : Executions based on third party services 
+
+Maybe only binary (true/false) database flag management is not enough and wants to integrate with specified feature flags services that offers further configuration (rollout, percentage, context evaluations, etc...)
 
 If you want to delegate the execution based on flags, you can integrate with third party services.
 
-Example using open source Feature flags provider [https://gofeatureflag.org/](https://gofeatureflag.org/) 
+A simple easy to manage openFeature Spec implementation is the opensource project [https://gofeatureflag.org/](https://gofeatureflag.org/) 
 
-See the demo at [demos/flowed-routing-openfeature-integration-demo](demos/flowed-routing-openfeature-integration-demo)
+See the demo using locally [https://gofeatureflag.org/](https://gofeatureflag.org/) at [demos/flowed-routing-openfeature-integration-demo](demos/flowed-routing-openfeature-integration-demo)
 
 
 # CUSTOM EVALUATORS
@@ -211,7 +267,7 @@ public class SpELEvaluator implements Evaluator{
 
 But maybe you want to create a custom evaluator that manage evaluationExpression in other way.
 
-Simply write a Evaluator implemetation and indicate a @EvaluatorType name.
+Simply write a Evaluator implemetation and indicate a **@EvaluatorType** name.
 
 This is a simple evaluator that uses klingon language [https://www.translator.eu/espanol/klingon/traductor/](https://www.translator.eu/espanol/klingon/traductor/)
 
