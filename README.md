@@ -32,7 +32,7 @@ Simply add this dependency at your Spring Boot project:
 		<dependency>
 			<groupId>io.github.danipenaperez</groupId>
 			<artifactId>spring-boot-flowed-routing-starter</artifactId>
-			<version>${project.version}</version>
+			<version>0.X.X</version>
 		</dependency>
 ```
 No further configuration needed.
@@ -152,9 +152,13 @@ At this point, when GreetingService.greeting() method is invoked, will be interc
 If the AUsersGreetingService.greeting FlowSpelCondition match, this bean will do the job. If any implementation match, the @RoutedComponent(isDefaultRouting = true) will be delegated.
 
 **Easy extendible and easy maintain**
+
 - You can add all custom implementations for GreetingService at any time without touch the initial Default implementation, and you can remove it in the same way.
 - Simply remove a feature without touch original implementation.
 - It is easy add new features all in the same code in a clean way, each bean has its owns dependencies.
+
+> [!NOTE]
+> Best Practies: If your new feature needs thirdparty libs, maintain in separate maven module to ensure easily future remove/add based on maven profiles. Your @RoutedComponen will be discovered if exists at classpath. 
 
 You can execute this code running the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-simple-demo)
 
