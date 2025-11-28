@@ -66,6 +66,11 @@
 	<profiles>
 		<profile>
 			<id>ci-cd</id>
+				<modules>
+					<!--Distribution-->
+					<module>spring-boot-flowed-routing-starter-parent</module>
+					<module>flowed-routing-core</module>
+				</modules>
 			<build>
 				<plugins>
 					<plugin>

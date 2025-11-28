@@ -12,7 +12,7 @@
 	<artifactId>flowed-routing-database-flag-demo</artifactId>
 	<version>0.1.0</version>
 	<name>flowed-routing-database-flag-demo</name>
-	<description>Demo project for Spring Boot Flowed Routing</description>
+	<description>Demo project for Spring Boot Flowed Routing Using Database Flags</description>
 	<url/>
 	<licenses>
 		<license/>
