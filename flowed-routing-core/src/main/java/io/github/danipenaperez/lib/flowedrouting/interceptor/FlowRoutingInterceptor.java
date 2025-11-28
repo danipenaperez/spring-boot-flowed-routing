@@ -119,7 +119,6 @@ public abstract class FlowRoutingInterceptor {
 			if(routedMethodDefinition.isDefault()) {
 				beanDelegateSelected = 	routedMethodDefinition.getBean();
 			}else {
-				System.out.println("no es el default");
 				Evaluator evaluator = getEvaluator(routedMethodDefinition.getFlowCondition().value());
 				boolean accepted = evaluator.evaluate(routedMethodDefinition, invocation);
 				if(accepted) {
@@ -128,15 +127,12 @@ public abstract class FlowRoutingInterceptor {
 			}
 		}
 
-		
 		return beanDelegateSelected;
 	}
 	
 	
 	protected Evaluator getEvaluator(String evaluatorType) {
-		Evaluator evaluator = evaluatorImplementations.get(evaluatorType);
-		
-		return evaluator;
+		return evaluatorImplementations.get(evaluatorType);
 	}
 }
 

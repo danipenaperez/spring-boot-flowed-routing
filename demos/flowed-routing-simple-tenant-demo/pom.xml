@@ -11,7 +11,7 @@
 	<groupId>io.github.danipenaperez</groupId>
 	<artifactId>flowed-routing-simple-tenant-demo</artifactId>
 	<version>0.1.0</version>
-	<name>flowed-routing-demo</name>
+	<name>flowed-routing-simple-tenant-demo</name>
 	<description>Demo project for Spring Boot Flowed Routing</description>
 	<url/>
 	<licenses>

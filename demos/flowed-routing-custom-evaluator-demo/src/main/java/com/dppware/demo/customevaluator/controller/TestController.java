@@ -14,8 +14,8 @@ public class TestController {
 	GreetingService greetingService;
 	
 	@GetMapping("/greeting")
-    public String serviceA(@RequestParam("language") String language) {
-        return greetingService.greeting(language);
+    public String serviceA(@RequestParam("userName") String userName) {
+        return greetingService.greeting(userName);
     }
 
 }

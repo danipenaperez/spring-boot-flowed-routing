@@ -8,8 +8,8 @@ import io.github.danipenaperez.lib.flowedrouting.annotation.RoutedComponent;
 public class DefaultGreetingService  implements GreetingService{
 
 	@Override
-	public String greeting(String language){
-		return "ejecutando Default para language "+language;
+	public String greeting(String userName){
+		return "Default Greeting for "+userName;
 	}
 
 }

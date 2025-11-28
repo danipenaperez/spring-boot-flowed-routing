@@ -31,7 +31,6 @@
 
 
 		<!-- demos-->
-		<module>demos/flowed-routing-demo</module>
 		<module>demos/flowed-routing-simple-demo</module>
 		<module>demos/flowed-routing-simple-tenant-demo</module>
 		<module>demos/flowed-routing-database-flag-demo</module>

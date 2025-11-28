@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>spring-boot-flowed-routing-starter</artifactId>
 	<url>https://github.com/danipenaperez/spring-boot-flowed-routing-starter</url>
-	<description>Utilities to transform and manage JSON Objects</description>
+	<description>Easy Routing bean implementations based on local rules or extenal integrations</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>

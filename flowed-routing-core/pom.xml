@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>flowed-routing-core</artifactId>
 	<url>https://github.com/danipenaperez/flowed-routing-core</url>
-	<description>Utilities to transform and manage JSON Objects</description>
+	<description>Easy Routing bean implementations based on local rules or extenal integrations</description>
 	  <parent>
 	    <groupId>io.github.danipenaperez</groupId>
 	    <artifactId>spring-boot-flowed-routing</artifactId>

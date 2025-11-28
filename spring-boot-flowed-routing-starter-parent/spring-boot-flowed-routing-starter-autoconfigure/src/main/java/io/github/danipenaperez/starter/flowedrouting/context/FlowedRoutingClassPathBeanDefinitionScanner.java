@@ -31,8 +31,7 @@ public class FlowedRoutingClassPathBeanDefinitionScanner extends ClassPathBeanDe
 
 	  @Override
 	  protected void postProcessBeanDefinition(AbstractBeanDefinition beanDefinition, String beanName) {
-		System.out.println("Y el bean Name es "+beanName);
-	    beanDefinition.setBeanClassName(getFactoryBeanClassName()); //Set real class name the FactoryProxyBean
+		beanDefinition.setBeanClassName(getFactoryBeanClassName()); //Set real class name the FactoryProxyBean
 
 	    beanDefinition
 	    	.getConstructorArgumentValues()

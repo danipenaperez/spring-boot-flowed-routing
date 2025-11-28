@@ -3,7 +3,7 @@
 
 ## Introduction
 
-This demo show a feature Flags service integration with [OpenFeature](https://openfeature.dev/) on opensource [https://gofeatureflag.org/](https://gofeatureflag.org/) 
+This demo show a feature Flags service integration with [OpenFeature](https://openfeature.dev/) on opensource [GoFeatureFlag Tool](https://gofeatureflag.org/) 
 
 # REQUISITES
 
@@ -26,8 +26,14 @@ new-greeting-flag:
     variation: not-available-new-greeting-feature
 ```
  
- You can create or edit your flags using online editor at [https://gofeatureflag.org/editor](https://gofeatureflag.org/editor)
-  
+ This create a flag called "new-greeting-flag" that has two variations (true or false).
+ 
+ Only tenant_1 users has enabled this feature.
+
+> [!NOTE]
+>  You can easily create or edit your flags using online editor at [https://gofeatureflag.org/editor](https://gofeatureflag.org/editor)
+
+
 ## 1.2 Create the configuration that contains the flags (variants and Rules).  
 
 Create the configuration file to use local file flag store:
@@ -41,7 +47,6 @@ retrievers:
 ## 1.3 Run the server
 
 ```sh
-
 cd docker
 
 docker run --rm \
@@ -69,13 +74,9 @@ public class GoFeatureFlagsClient {
 	
 	public boolean isFlagActiveForCurrentRequest(String flagName) {
 		//Obtain current context
-		
 		EvaluationContext evaluationContext = new MutableContext(UUID.randomUUID().toString()).add("tenantId", getTenantName());
-		
 		return client.getBooleanValue("new-greeting-flag", false, evaluationContext);
-		
 	}
-	
 	
 	public String getTenantName () {
 		ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
@@ -89,11 +90,15 @@ public class GoFeatureFlagsClient {
 
 Reference the client at @FlowSpelCondition:
 
+```java
 	@FlowSpelCondition(evaluationExpression = "@goFeatureFlagsClient.isFlagActiveForCurrentRequest('new-greeting-flag')")
+```
+
+The new Greeting Feature Service Bean will looks like this:
 
 ```java
 @RoutedComponent
-public class AUsersGreetingService  implements GreetingService{
+public class NewFeatureUsersGreetingService  implements GreetingService{
 
 	@FlowConditionType("SpEL") //Indicate use default evaluator provided in starter. Will use SpEL expressions
 	@FlowSpelCondition(evaluationExpression = "@goFeatureFlagsClient.isFlagActiveForCurrentRequest('new-greeting-flag')") 
@@ -134,3 +139,5 @@ Greetings for Anthony
 # 4. Benefics
 
 Using openFeature server implementation services will managed dymanic the up / down flags.
+
+If you are newer at FeatureFlags solutions, please visit [https://openfeature.dev/docs/reference/intro](https://openfeature.dev/docs/reference/intro) to know about benefits about.

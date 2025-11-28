@@ -6,6 +6,7 @@ Easy Routing bean implementations based on local rules or extenal integrations
 ## Key Features
 
 * Easy Flow code management execution 
+* Focused on Clean Code and SOLID principles
 * Easy installation
   - Integrate as Spring Boot starter in your project.
 * Easy to use
@@ -15,6 +16,13 @@ Easy Routing bean implementations based on local rules or extenal integrations
   - Or write your own evaluator engine simply extending the Evaluator interface.
   - Use your available beans to evaluate any flow execution.
   - Integrate thirdparty tools (such a feature flags provider) to delegate executions.
+
+## Use Cases
+
+* Multitenant Applications: same App different behaviours
+* One trunk development: live ready and in progress features, activate or deactivate when you want
+* Experimental code: Your repository is slow. Within the same code add new Repository solution and this repository only will be executed on conditions (maybe only for your current user), the other users will not be affected. Easily remove the code when experiment is finish.
+* ...
 
 ## Installation
 
@@ -84,7 +92,7 @@ For now you application has the default Greeting service created, all request th
 
 ### Adding different implementation for the same Use Case
 
-**After few days Product Owner wants** that the users wich first username letter is "A" will receive a "you are amazing {username}" message. 
+**After few days Product Owner wants** that the users which first username letter is "A" will receive a "you are amazing {username}" message. 
 
 What and horrible tendencies could be here... Maybe a lot of if/else conditions, maybe mixed @autowired elementes in the same bean class.
 
@@ -112,13 +120,16 @@ public class DefaultGreetingService  implements GreetingService{
 }
 
 ```
-This code is sharing resources, has bad maintainly, no way !!
+- Each if statement need a Provider bean that is autowired, a lot of dependencies on the same bean class
+- If new feature is requested, another if condition and another dependency should be added..
+- If a feature is discarted is needed to remove if else condition and dependency
+- ....
 
 **The solution**
 
 It is easy, no if/else sentences needed. Not horrible bean implementation with shared autowired dependencies in the same class.
 
-Maintain your code simple and clean.
+**Maintain your code simple and clean.**
 
 Simply create new GreetingService implementation and annote with **@RoutedComponent** . Write the SpelCondition that checks for userName first letter matchs with "A".
 
@@ -223,7 +234,21 @@ public interface FlagsRepository extends JpaRepository<Flag, Long> {
 }
 ```
 
-Now update your evaluation using the FlagsRepository bean available at context, and making a **triple condition based on database value + Request Value + input method value**.
+And a @Component that encapsulate the repository calls.
+
+```java
+@Component
+@AllArgsConstructor
+public class FlagService {
+	FlagRepository flagRepository;
+
+public boolean isFlagActive(String flagName) {
+		return flagRepository.isFlagEnabled(flagName);
+	}
+}
+```
+
+Now update your evaluation using the FlagService bean available at context, and making a **triple condition based on database value + Request Value + input method value**.
 
 The code will look like this:
 
@@ -232,7 +257,7 @@ The code will look like this:
 public class AUsersGreetingService  implements GreetingService{
 
 	@FlowConditionType("SpEL") //Indicate use default evaluator provided in starter. Will use SpEL expressions
-	@FlowSpelCondition(evaluationExpression = " @FlagsRepository.isFlagEnabled('greeting_tenant1)
+	@FlowSpelCondition(evaluationExpression = " @flagService.isFlagEnabled('greeting_tenant1)
                                               && #username.startsWith('A') 
                                               && @executionContext.getTenantName() == 'tenant_1'") 
 	@Override
@@ -242,17 +267,19 @@ public class AUsersGreetingService  implements GreetingService{
 }
 ```
 
-See the demo at [demos/flowed-routing-simple-demo](demos/flowed-routing-database-flag-demo)
+See the demo at [demos/flowed-routing-database-flag-demo](demos/flowed-routing-database-flag-demo)
 
 ## Example 3 : Executions based on third party services 
 
 Maybe only binary (true/false) database flag management is not enough and wants to integrate with specified feature flags services that offers further configuration (rollout, percentage, context evaluations, etc...)
 
-If you want to delegate the execution based on flags, you can integrate with third party services.
+If you are newer at FeatureFlags solutions, please visit [https://openfeature.dev/docs/reference/intro](https://openfeature.dev/docs/reference/intro) to know about benefits about.
 
-A simple easy to manage openFeature Spec implementation is the opensource project [https://gofeatureflag.org/](https://gofeatureflag.org/) 
+If you want to delegate the execution based on external Feature Flags Services, you can integrate with third party services.
 
-See the demo using locally [https://gofeatureflag.org/](https://gofeatureflag.org/) at [demos/flowed-routing-openfeature-integration-demo](demos/flowed-routing-openfeature-integration-demo)
+A simple easy to manage openFeature Spec implementation is the opensource project [GoFeatureFlags](https://gofeatureflag.org/) 
+
+See the demo using locally [GoFeatureFlags](https://gofeatureflag.org/) at [demos/flowed-routing-openfeature-integration-demo](demos/flowed-routing-openfeature-integration-demo)
 
 
 # CUSTOM EVALUATORS
@@ -328,7 +355,7 @@ See the demo at [demos/flowed-routing-custom-evaluator-demo](demos/flowed-routin
 
 If you are using modular application builder, such as maven or gradle it is a good idea to create new Feature implementations in different jars and use maven Profiles to build the final artefact easily.
 
-If the product Owner wants to delete or add features simply use maven profile to include the jar that contains the feature implementation. 
+If the product Owner wants to delete or add features simply use maven profile to include/exclude the jar that contains the feature implementation and all third-party dependencies.
 
 
 ## Emailware
@@ -338,9 +365,7 @@ Spring Boot Flowed Routing is Free to extend and usage. I'd like you send me an 
 ## Support
 
 If you like this project and think it has helped in any way, consider buying me a coffee!
-
 <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="danipenaperez" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
-
 
 ## License
 
