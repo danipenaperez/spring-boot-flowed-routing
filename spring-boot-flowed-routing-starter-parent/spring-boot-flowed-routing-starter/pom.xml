@@ -5,6 +5,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>spring-boot-flowed-routing-starter</artifactId>
+	<name>spring-boot-flowed-routing-starter</name>
 	<url>https://github.com/danipenaperez/spring-boot-flowed-routing-starter</url>
 	<description>Easy Routing bean implementations based on local rules or extenal integrations</description>
 	<properties>

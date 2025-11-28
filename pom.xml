@@ -24,19 +24,7 @@
 	</properties>
 
 
-	<modules>
-		<!--Distribution-->
-		<module>spring-boot-flowed-routing-starter-parent</module>
-		<module>flowed-routing-core</module>
 
-
-		<!-- demos-->
-		<module>demos/flowed-routing-simple-demo</module>
-		<module>demos/flowed-routing-simple-tenant-demo</module>
-		<module>demos/flowed-routing-database-flag-demo</module>
-		<module>demos/flowed-routing-openfeature-integration-demo</module>
-		<module>demos/flowed-routing-custom-evaluator-demo</module>
-	</modules>
 
 	<dependencies>
 		<dependency>
@@ -51,6 +39,14 @@
 			<groupId>jakarta.annotation</groupId>
 			<artifactId>jakarta.annotation-api</artifactId>
 		</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-test</artifactId>
+		    <scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -64,6 +60,23 @@
 	</dependencyManagement>
 
 	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<!--Distribution-->
+				<module>spring-boot-flowed-routing-starter-parent</module>
+				<module>flowed-routing-core</module>
+				<!-- demos-->
+				<module>demos/flowed-routing-simple-demo</module>
+				<module>demos/flowed-routing-simple-tenant-demo</module>
+				<module>demos/flowed-routing-database-flag-demo</module>
+				<module>demos/flowed-routing-openfeature-integration-demo</module>
+				<module>demos/flowed-routing-custom-evaluator-demo</module>
+			</modules>
+		</profile>	
 		<profile>
 			<id>ci-cd</id>
 				<modules>
@@ -93,6 +106,7 @@
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
+								<phase>package</phase>
 								<goals>
 									<goal>jar</goal>
 								</goals>
@@ -102,7 +116,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
+						<version>3.2.8</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
