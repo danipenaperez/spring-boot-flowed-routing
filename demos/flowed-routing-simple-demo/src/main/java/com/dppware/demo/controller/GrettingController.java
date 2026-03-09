@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dppware.demo.service.GreetingService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
+@Slf4j
 public class GrettingController {
 
 	@Autowired
@@ -15,6 +18,7 @@ public class GrettingController {
 
 	@GetMapping("/greeting")
 	public String serviceA(@RequestParam("userName") String userName) {
+		log.info("hello");
 		return greetingService.greeting(userName);
 	}
 
