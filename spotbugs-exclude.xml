@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+
+    <!-- Exclude Lombok-generated code (constructors, builders, equals/hashCode) -->
+    <Match>
+        <Source name="~.*\.java"/>
+        <Bug code="NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
+    </Match>
+
+    <!-- Exclude Spring @Autowired fields flagged as uninitialized -->
+    <Match>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Match>
+    <Match>
+        <Bug pattern="UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"/>
+    </Match>
+
+    <!-- Exclude demo modules from strict analysis -->
+    <Match>
+        <Package name="~com\.dppware\.demo.*"/>
+    </Match>
+
+</FindBugsFilter>

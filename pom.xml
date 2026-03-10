@@ -21,6 +21,7 @@
 		<java.version>21</java.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct.processor.version>1.6.3</mapstruct.processor.version>
+		<spotbugs.version>4.9.8.2</spotbugs.version>
 	</properties>
 
 
@@ -77,6 +78,60 @@
 				<module>demos/flowed-routing-custom-evaluator-demo</module>
 			</modules>
 		</profile>	
+		<profile>
+			<id>quality</id>
+			<modules>
+				<module>spring-boot-flowed-routing-starter-parent</module>
+				<module>flowed-routing-core</module>
+			</modules>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- SpotBugs: static analysis that finds real bug patterns in bytecode.
+						     Runs after compile phase (analyze .class files, not source).
+						     Fails the build if any bug of the configured threshold is found. -->
+						<groupId>com.github.spotbugs</groupId>
+						<artifactId>spotbugs-maven-plugin</artifactId>
+						<version>${spotbugs.version}</version>
+						<configuration>
+							<!-- Minimum bug severity to report: LOW | MEDIUM | HIGH
+							     HIGH = only critical bugs. LOW = everything including minor issues. -->
+							<threshold>MEDIUM</threshold>
+
+							<!-- Bug category effort: MIN | DEFAULT | MAX
+							     MAX = deeper analysis, slower build, more findings. -->
+							<effort>DEFAULT</effort>
+
+							<!-- Fail the build when bugs are found (true = strict mode) -->
+							<failOnError>true</failOnError>
+
+							<!-- Generate XML report at target/spotbugsXml.xml -->
+							<xmlOutput>true</xmlOutput>
+
+							<!-- Generate HTML report at target/spotbugs.html -->
+							<htmlOutput>true</htmlOutput>
+
+							<!-- Exclude filter file: path relative to root module.
+							     ${maven.multiModuleProjectDirectory} always points to the
+							     root directory where mvn was invoked, regardless of submodule. -->
+							<excludeFilterFile>${maven.multiModuleProjectDirectory}/spotbugs-exclude.xml</excludeFilterFile>
+						</configuration>
+						<executions>
+							<execution>
+								<id>spotbugs-check</id>
+								<!-- Binds to 'verify' phase, runs after compile+test -->
+								<phase>verify</phase>
+								<goals>
+									<!-- 'check' runs analysis and fails build on findings -->
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<profile>
 			<id>ci-cd</id>
 				<modules>
